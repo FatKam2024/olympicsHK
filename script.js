@@ -6,20 +6,23 @@ fetch('OlympicsHK.csv')
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                console.log('CSV Parsed Data:', results.data); // Debugging line
                 const events = results.data.map(row => ({
                     sport: row['Type'],
                     date: row['Date'],
                     time: row['HK Time'],
                     event: row['Event']
                 }));
-                console.log('Events:', events); // Debugging line
                 const uniqueDates = [...new Set(events.map(e => e.date))];
                 const uniqueSports = [...new Set(events.map(e => e.sport))];
 
                 createTableHeaders(uniqueDates);
                 createTableRows(events, uniqueDates);
                 createButtons(uniqueSports);
+
+                // Show the first sport by default
+                if (uniqueSports.length > 0) {
+                    filterSport(uniqueSports[0]);
+                }
             }
         });
     });
@@ -29,11 +32,13 @@ const createTableHeaders = (uniqueDates) => {
     const tableHead = document.getElementById('tableHead');
     let headerRow = '<tr><th></th>';
     uniqueDates.forEach(date => {
-        headerRow += `<th>${date}</th>`;
+        const dateObj = new Date(date.replace(/月|日/g, '/').replace(/ /g, ''));
+        const day = dateObj.toLocaleDateString('zh-HK', { month: 'short', day: 'numeric' });
+        const weekday = dateObj.toLocaleDateString('zh-HK', { weekday: 'short' });
+        headerRow += `<th>${day}<br>(${weekday})</th>`;
     });
     headerRow += '</tr>';
     tableHead.innerHTML = headerRow;
-    console.log('Table Headers:', tableHead.innerHTML); // Debugging line
 };
 
 // Create table rows with time slots
@@ -52,19 +57,18 @@ const createTableRows = (events, uniqueDates) => {
         row += '</tr>';
         tableBody.innerHTML += row;
     });
-    console.log('Table Body:', tableBody.innerHTML); // Debugging line
 };
 
 // Create buttons for sports
 const createButtons = (uniqueSports) => {
     const buttonsDiv = document.getElementById('buttons');
-    uniqueSports.forEach(sport => {
+    uniqueSports.forEach((sport, index) => {
         const button = document.createElement('button');
         button.innerText = sport;
         button.onclick = () => filterSport(sport);
+        if (index === 0) button.classList.add('active'); // Default active button for the first sport
         buttonsDiv.appendChild(button);
     });
-    console.log('Buttons:', buttonsDiv.innerHTML); // Debugging line
 };
 
 // Filter events by sport
@@ -79,6 +83,16 @@ const filterSport = (sport) => {
             }
         });
         row.style.display = hasSportEvent ? '' : 'none';
+    });
+
+    // Update active button
+    const buttons = document.querySelectorAll('#buttons button');
+    buttons.forEach(button => {
+        if (button.innerText === sport) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
     });
 };
 
