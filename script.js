@@ -6,12 +6,14 @@ fetch('OlympicsHK.csv')
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
+                console.log('CSV Parsed Data:', results.data); // Debugging line
                 const events = results.data.map(row => ({
                     sport: row['Type'],
                     date: row['Date'],
                     time: row['HK Time'],
                     event: row['Event']
                 }));
+                console.log('Events:', events); // Debugging line
                 const uniqueDates = [...new Set(events.map(e => e.date))];
                 const uniqueSports = [...new Set(events.map(e => e.sport))];
 
@@ -40,6 +42,7 @@ const createTableHeaders = (uniqueDates) => {
     });
     headerRow += '</tr>';
     tableHead.innerHTML = headerRow;
+    console.log('Table Headers:', tableHead.innerHTML); // Debugging line
 };
 
 // Create table rows with time slots
@@ -58,6 +61,7 @@ const createTableRows = (events, uniqueDates) => {
         row += '</tr>';
         tableBody.innerHTML += row;
     });
+    console.log('Table Body:', tableBody.innerHTML); // Debugging line
 };
 
 // Create buttons for sports
@@ -70,6 +74,7 @@ const createButtons = (uniqueSports) => {
         if (index === 0) button.classList.add('active'); // Default active button for the first sport
         buttonsDiv.appendChild(button);
     });
+    console.log('Buttons:', buttonsDiv.innerHTML); // Debugging line
 };
 
 // Filter events by sport
@@ -96,3 +101,6 @@ const filterSport = (sport) => {
         }
     });
 };
+
+// Debugging: Log to verify script load
+console.log('Script loaded and running.');
