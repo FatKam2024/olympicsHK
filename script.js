@@ -17,6 +17,9 @@ fetch('OlympicsHK.csv')
                 const uniqueDates = [...new Set(events.map(e => e.date))];
                 const uniqueSports = [...new Set(events.map(e => e.sport))];
 
+                console.log('Unique Dates:', uniqueDates); // Debugging line
+                console.log('Unique Sports:', uniqueSports); // Debugging line
+
                 createTableHeaders(uniqueDates);
                 createTableRows(events, uniqueDates);
                 createButtons(uniqueSports);
@@ -55,6 +58,7 @@ const createTableRows = (events, uniqueDates) => {
         uniqueDates.forEach(date => {
             const slotStart = slot.split(' ')[0];
             const slotEvents = events.filter(event => event.date === date && event.time.startsWith(slotStart));
+            console.log(`Events for ${slot} on ${date}:`, slotEvents); // Debugging line
             const eventsList = slotEvents.map(event => `${event.time} ${event.event}`).join('<br>');
             row += `<td data-sport="${slotEvents.length ? slotEvents[0].sport : ''}">${eventsList}</td>`;
         });
@@ -79,6 +83,7 @@ const createButtons = (uniqueSports) => {
 
 // Filter events by sport
 const filterSport = (sport) => {
+    console.log('Filtering for sport:', sport); // Debugging line
     const rows = document.querySelectorAll('#tableBody tr');
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
