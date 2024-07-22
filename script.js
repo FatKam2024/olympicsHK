@@ -32,10 +32,11 @@ const createTableHeaders = (uniqueDates) => {
     const tableHead = document.getElementById('tableHead');
     let headerRow = '<tr><th></th>';
     uniqueDates.forEach(date => {
-        const dateObj = new Date(date.replace(/月|日/g, '/').replace(/ /g, ''));
-        const day = dateObj.toLocaleDateString('zh-HK', { month: 'short', day: 'numeric' });
+        const dayAndMonth = date.replace(/月/, '/').replace(/日/, '');
+        const dateObj = new Date(`2024/${dayAndMonth}`);
+        const day = dateObj.toLocaleDateString('zh-HK', { month: 'numeric', day: 'numeric' });
         const weekday = dateObj.toLocaleDateString('zh-HK', { weekday: 'short' });
-        headerRow += `<th>${day}<br>(${weekday})</th>`;
+        headerRow += `<th>${day} (${weekday})</th>`;
     });
     headerRow += '</tr>';
     tableHead.innerHTML = headerRow;
@@ -95,6 +96,3 @@ const filterSport = (sport) => {
         }
     });
 };
-
-// Debugging: Log to verify script load
-console.log('Script loaded and running.');
