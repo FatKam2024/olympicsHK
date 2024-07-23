@@ -77,18 +77,20 @@ const generateTableHTML = (uniqueDates, events) => {
 
     timeSlots.forEach(slot => {
         let row = `<tr><td>${slot}</td>`;
+        let rowHasEvent = false;
         uniqueDates.forEach(date => {
             const slotStartHour = parseInt(slot.split(':')[0]);
             const slotEvents = events.filter(event => {
                 const [eventHour, eventMinute] = event.time.split(':').map(Number);
                 return event.date === date && eventHour >= slotStartHour && eventHour < slotStartHour + 1;
             });
+            if (slotEvents.length > 0) rowHasEvent = true;
             console.log(`Events for ${slot} on ${date}:`, slotEvents); // Debugging line
             const eventsList = slotEvents.map(event => `${event.time} ${event.event}`).join('<br>');
             row += `<td>${eventsList}</td>`;
         });
         row += '</tr>';
-        tableHTML += row;
+        if (rowHasEvent) tableHTML += row;
     });
 
     tableHTML += '</tbody>';
