@@ -11,7 +11,8 @@ fetch('OlympicsHK.csv')
                     sport: row['Type'],
                     date: row['Date'],
                     time: row['HK Time'],
-                    event: row['Event']
+                    event: row['Event'],
+                    player: row['Player']
                 }));
                 console.log('Events:', events); // Debugging line
                 const uniqueDates = [...new Set(events.map(e => e.date))];
@@ -86,7 +87,7 @@ const generateTableHTML = (uniqueDates, events) => {
             });
             if (slotEvents.length > 0) rowHasEvent = true;
             console.log(`Events for ${slot} on ${date}:`, slotEvents); // Debugging line
-            const eventsList = slotEvents.map(event => `${event.time} ${event.event}`).join('<br>');
+            const eventsList = slotEvents.map(event => `${event.time} ${event.event} ${event.player}`).join('<br>');
             row += `<td>${eventsList}</td>`;
         });
         row += '</tr>';
