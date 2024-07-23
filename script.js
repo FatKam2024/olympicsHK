@@ -30,6 +30,9 @@ fetch('OlympicsHK.csv')
                 }
             }
         });
+    })
+    .catch(error => {
+        console.error('Error fetching CSV:', error); // Debugging line
     });
 
 // Create table headers
@@ -37,11 +40,11 @@ const createTableHeaders = (uniqueDates) => {
     const tableHead = document.getElementById('tableHead');
     let headerRow = '<tr><th></th>';
     uniqueDates.forEach(date => {
-        const dayAndMonth = date.replace(/月/, '/').replace(/日/, '');
-        const dateObj = new Date(`2024/${dayAndMonth}`);
-        const day = dateObj.toLocaleDateString('zh-HK', { month: 'numeric', day: 'numeric' });
+        const [day, month, year] = date.split('/');
+        const dateObj = new Date(`${year}-${month}-${day}`);
+        const dayStr = dateObj.toLocaleDateString('zh-HK', { month: 'numeric', day: 'numeric' });
         const weekday = dateObj.toLocaleDateString('zh-HK', { weekday: 'short' });
-        headerRow += `<th>${day} (${weekday})</th>`;
+        headerRow += `<th>${dayStr} (${weekday})</th>`;
     });
     headerRow += '</tr>';
     tableHead.innerHTML = headerRow;
