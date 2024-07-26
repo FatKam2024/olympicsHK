@@ -56,7 +56,7 @@ const createButtonAndDropdown = (uniqueSports) => {
     
     // Add default option
     const defaultOption = document.createElement('option');
-    defaultOption.text = 'Select a sport';
+    defaultOption.text = 'Sport';
     defaultOption.value = '';
     sportDropdown.add(defaultOption);
 
@@ -74,7 +74,7 @@ const createButtonAndDropdown = (uniqueSports) => {
     const liveChannelsDropdown = document.createElement('select');
     liveChannelsDropdown.id = 'live-channels';
     liveChannelsDropdown.innerHTML = `
-        <option value="">Select a live channel</option>
+        <option value="">Channel</option>
         <option value="https://www.rthk.hk/timetable/tv31">香港電台31台</option>
         <option value="https://app7.rthk.hk/special/sports32/index.php">香港電台32台</option>
         <option value="https://hoy.tv/live?channel_no=77">HOY 77台</option>
