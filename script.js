@@ -38,14 +38,15 @@ const createButtonAndDropdown = (uniqueSports) => {
     allSportsButton.innerText = 'All Sports';
     allSportsButton.onclick = () => {
         filterSport('All Sports');
-        document.querySelector('#buttons select').selectedIndex = 0;  // Reset to "Select a sport"
+        document.querySelector('#select-sport').selectedIndex = 0;
     };
     allSportsButton.classList.add('active');
     buttonsDiv.appendChild(allSportsButton);
 
     // Create dropdown for other sports
-    const dropdown = document.createElement('select');
-    dropdown.onchange = (e) => {
+    const sportDropdown = document.createElement('select');
+    sportDropdown.id = 'select-sport';
+    sportDropdown.onchange = (e) => {
         if (e.target.value === '') {
             filterSport('All Sports');
         } else {
@@ -57,26 +58,39 @@ const createButtonAndDropdown = (uniqueSports) => {
     const defaultOption = document.createElement('option');
     defaultOption.text = 'Select a sport';
     defaultOption.value = '';
-    dropdown.add(defaultOption);
+    sportDropdown.add(defaultOption);
 
     // Add sport options
     uniqueSports.slice(1).forEach(sport => {
         const option = document.createElement('option');
         option.text = sport;
         option.value = sport;
-        dropdown.add(option);
+        sportDropdown.add(option);
     });
 
-    buttonsDiv.appendChild(dropdown);
+    buttonsDiv.appendChild(sportDropdown);
 
-    // Add event listener for live channels drop-down
-    const liveChannelsDropdown = document.getElementById('live-channels');
+    // Add dropdown for live channels
+    const liveChannelsDropdown = document.createElement('select');
+    liveChannelsDropdown.id = 'live-channels';
+    liveChannelsDropdown.innerHTML = `
+        <option value="">Select a live channel</option>
+        <option value="https://www.rthk.hk/timetable/tv31">香港電台31台</option>
+        <option value="https://app7.rthk.hk/special/sports32/index.php">香港電台32台</option>
+        <option value="https://hoy.tv/live?channel_no=77">HOY 77台</option>
+        <option value="https://hoy.tv/live?channel_no=76">HOY 76台</option>
+        <option value="https://viu.tv/ch/99">ViuTV99台</option>
+        <option value="https://viu.tv/ch/96">ViuTV96台</option>
+        <option value="https://news.tvb.com/tc/live/83">TVB新聞台83台</option>
+    `;
     liveChannelsDropdown.onchange = (e) => {
         if (e.target.value) {
             window.open(e.target.value, '_blank');
             liveChannelsDropdown.selectedIndex = 0; // Reset the dropdown to default
         }
     };
+
+    buttonsDiv.appendChild(liveChannelsDropdown);
 };
 
 
@@ -312,4 +326,3 @@ document.addEventListener('DOMContentLoaded', () => {
     tablesDiv.parentNode.insertBefore(tableContainer, tablesDiv);
     tableContainer.appendChild(tablesDiv);
 });
-
