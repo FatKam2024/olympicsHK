@@ -22,7 +22,7 @@
             justify-content: center;
             margin-bottom: 20px;
         }
-        button {
+        button, select {
             margin: 5px;
             padding: 10px 15px;
             background-color: #4CAF50;
@@ -32,7 +32,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        button:hover {
+        button:hover, select:hover {
             background-color: #45a049;
         }
         button.active {
@@ -62,23 +62,6 @@
         .hidden {
             display: none;
         }
-        .live-channels {
-            margin-top: 30px;
-            text-align: center;
-        }
-        .live-channels a {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px 15px;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        .live-channels a:hover {
-            background-color: #2980b9;
-        }
         @media (max-width: 768px) {
             th, td {
                 padding: 8px;
@@ -95,18 +78,19 @@
 </head>
 <body>
     <h1>Hong Kong Team Matches - Paris Olympics</h1>
-    <div id="buttons"></div>
-    <div id="tables"></div>
-    <div class="live-channels">
-        <h2>Live Channels</h2>
-        <a href="https://www.rthk.hk/timetable/tv31" target="_blank">香港電台31台</a>
-        <a href="https://app7.rthk.hk/special/sports32/index.php" target="_blank">香港電台32台</a>
-        <a href="https://hoy.tv/live?channel_no=77" target="_blank">HOY 77台</a>
-        <a href="https://hoy.tv/live?channel_no=76" target="_blank">HOY 76台</a>
-        <a href="https://viu.tv/ch/99" target="_blank">ViuTV99台</a>
-        <a href="https://viu.tv/ch/96" target="_blank">ViuTV96台</a>
-        <a href="https://news.tvb.com/tc/live/83" target="_blank">TVB新聞台83台</a>
+    <div id="buttons">
+        <select id="live-channels">
+            <option value="">Select a live channel</option>
+            <option value="https://www.rthk.hk/timetable/tv31">香港電台31台</option>
+            <option value="https://app7.rthk.hk/special/sports32/index.php">香港電台32台</option>
+            <option value="https://hoy.tv/live?channel_no=77">HOY 77台</option>
+            <option value="https://hoy.tv/live?channel_no=76">HOY 76台</option>
+            <option value="https://viu.tv/ch/99">ViuTV99台</option>
+            <option value="https://viu.tv/ch/96">ViuTV96台</option>
+            <option value="https://news.tvb.com/tc/live/83">TVB新聞台83台</option>
+        </select>
     </div>
+    <div id="tables"></div>
     <script src="script.js"></script>
 </body>
 </html>
