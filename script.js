@@ -6,7 +6,6 @@ fetch('OlympicsHK.csv')
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                console.log('CSV Parsed Data:', results.data); // Debugging line
                 const events = results.data.map(row => ({
                     sport: row['Type'],
                     date: row['Date'],
@@ -14,12 +13,8 @@ fetch('OlympicsHK.csv')
                     event: row['Event'],
                     player: row['Player']
                 }));
-                console.log('Events:', events); // Debugging line
                 const uniqueDates = [...new Set(events.map(e => e.date))];
                 const uniqueSports = [...new Set(events.map(e => e.sport))];
-
-                console.log('Unique Dates:', uniqueDates); // Debugging line
-                console.log('Unique Sports:', uniqueSports); // Debugging line
 
                 createButtons(['All Sports', ...uniqueSports]);
                 createTables('All Sports', uniqueDates, events);
@@ -33,7 +28,7 @@ fetch('OlympicsHK.csv')
         });
     })
     .catch(error => {
-        console.error('Error fetching CSV:', error); // Debugging line
+        console.error('Error fetching CSV:', error);
     });
 
 // Create buttons for sports
@@ -43,10 +38,9 @@ const createButtons = (uniqueSports) => {
         const button = document.createElement('button');
         button.innerText = sport;
         button.onclick = () => filterSport(sport);
-        if (index === 0) button.classList.add('active'); // Default active button for the first sport
+        if (index === 0) button.classList.add('active');
         buttonsDiv.appendChild(button);
     });
-    console.log('Buttons:', buttonsDiv.innerHTML); // Debugging line
 };
 
 // Create tables for each sport
@@ -73,19 +67,17 @@ const createTables = (uniqueSports, uniqueDates, events) => {
 
 // Generate HTML for each table
 const generateTableHTML = (uniqueDates, events) => {
-    let tableHTML = '<thead>';
-    let headerRow = '<tr><th></th>';
+    let tableHTML = '<thead><tr><th>Time</th>';
     uniqueDates.forEach(date => {
         const [day, month, year] = date.split('/');
         const dateObj = new Date(`${year}-${month}-${day}`);
-        const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
-        headerRow += `<th>${dayStr} (${weekday})</th>`;
+        tableHTML += `<th class="date-header">${dayStr}<br>${weekday}</th>`;
     });
-    headerRow += '</tr>';
-    tableHTML += headerRow + '</thead><tbody>';
+    tableHTML += '</tr></thead><tbody>';
 
-    const timeSlots = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00 - ${String(i + 1).padStart(2, '0')}:00`);
+    const timeSlots = Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`);
 
     timeSlots.forEach(slot => {
         let row = `<tr><td>${slot}</td>`;
@@ -94,11 +86,16 @@ const generateTableHTML = (uniqueDates, events) => {
             const slotStartHour = parseInt(slot.split(':')[0]);
             const slotEvents = events.filter(event => {
                 const [eventHour, eventMinute] = event.time.split(':').map(Number);
-                return event.date === date && eventHour >= slotStartHour && eventHour < slotStartHour + 1;
+                return event.date === date && eventHour === slotStartHour;
             });
             if (slotEvents.length > 0) rowHasEvent = true;
-            console.log(`Events for ${slot} on ${date}:`, slotEvents); // Debugging line
-            const eventsList = slotEvents.map(event => `${event.time} ${event.event} ${event.player}`).join('<br>');
+            const eventsList = slotEvents.map(event => `
+                <div class="event">
+                    <strong>${event.time}</strong><br>
+                    ${event.event}<br>
+                    <em>${event.player}</em>
+                </div>
+            `).join('');
             row += `<td>${eventsList}</td>`;
         });
         row += '</tr>';
@@ -106,13 +103,11 @@ const generateTableHTML = (uniqueDates, events) => {
     });
 
     tableHTML += '</tbody>';
-    console.log(`Generated Table HTML for ${events[0]?.sport}:`, tableHTML); // Debugging line
     return tableHTML;
 };
 
 // Filter events by sport
 const filterSport = (sport) => {
-    console.log('Filtering for sport:', sport); // Debugging line
     const tables = document.querySelectorAll('#tables table');
     tables.forEach(table => {
         if (table.id === sport) {
@@ -132,6 +127,3 @@ const filterSport = (sport) => {
         }
     });
 };
-
-// Debugging: Log to verify script load
-console.log('Script loaded and running.');

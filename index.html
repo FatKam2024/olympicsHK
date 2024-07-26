@@ -5,43 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hong Kong Team Matches - Paris Olympics</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        #buttons {
-            text-align: center;
-            margin-bottom: 20px;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
         th, td {
             border: 1px solid black;
-            padding: 10px;
+            padding: 8px;
             text-align: left;
+            width: 100px; /* Fixed column width */
         }
         th {
             background-color: #f2f2f2;
         }
-        th:first-child, td:first-child {
-            width: 150px;
-            background-color: #f9f9f9;
-            position: sticky;
-            left: 0;
-        }
         button {
             margin: 5px;
-            padding: 10px 20px;
+            padding: 10px;
             font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
         }
         .active {
             background-color: #4CAF50; /* Active button color */
@@ -58,9 +38,6 @@
             margin: 5px 0;
             font-size: 16px;
             color: blue;
-        }
-        .live-channels a:hover {
-            text-decoration: underline;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -81,6 +58,118 @@
         <a href="https://news.tvb.com/tc/live/83" target="_blank">TVB新聞台83台直播連結</a>
     </div>
 
+    <script src="script.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong Team Matches - Paris Olympics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button.active {
+            background-color: #45a049;
+        }
+        #tables {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .hidden {
+            display: none;
+        }
+        .live-channels {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .live-channels a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .live-channels a:hover {
+            background-color: #2980b9;
+        }
+        @media (max-width: 768px) {
+            th, td {
+                padding: 8px;
+                font-size: 14px;
+            }
+            .date-header {
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                white-space: nowrap;
+                padding: 10px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Hong Kong Team Matches - Paris Olympics</h1>
+    <div id="buttons"></div>
+    <div id="tables"></div>
+    <div class="live-channels">
+        <h2>Live Channels</h2>
+        <a href="https://www.rthk.hk/timetable/tv31" target="_blank">香港電台31台</a>
+        <a href="https://app7.rthk.hk/special/sports32/index.php" target="_blank">香港電台32台</a>
+        <a href="https://hoy.tv/live?channel_no=77" target="_blank">HOY 77台</a>
+        <a href="https://hoy.tv/live?channel_no=76" target="_blank">HOY 76台</a>
+        <a href="https://viu.tv/ch/99" target="_blank">ViuTV99台</a>
+        <a href="https://viu.tv/ch/96" target="_blank">ViuTV96台</a>
+        <a href="https://news.tvb.com/tc/live/83" target="_blank">TVB新聞台83台</a>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
