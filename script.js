@@ -75,13 +75,13 @@ const createButtonAndDropdown = (uniqueSports) => {
     liveChannelsDropdown.id = 'live-channels';
     liveChannelsDropdown.innerHTML = `
         <option value="">Channel</option>
-        <option value="https://www.rthk.hk/timetable/tv31">香港電台31台</option>
-        <option value="https://app7.rthk.hk/special/sports32/index.php">香港電台32台</option>
-        <option value="https://hoy.tv/live?channel_no=77">HOY 77台</option>
-        <option value="https://hoy.tv/live?channel_no=76">HOY 76台</option>
-        <option value="https://viu.tv/ch/99">ViuTV99台</option>
-        <option value="https://viu.tv/ch/96">ViuTV96台</option>
-        <option value="https://news.tvb.com/tc/live/83">TVB新聞台83台</option>
+        <option value="https://www.rthk.hk/timetable/tv31">RTHK31台</option>
+        <option value="https://app7.rthk.hk/special/sports32/index.php">RTHK32台</option>
+        <option value="https://hoy.tv/live?channel_no=77">HOY77台</option>
+        <option value="https://hoy.tv/live?channel_no=76">HOY76台</option>
+        <option value="https://viu.tv/ch/99">Viu99台</option>
+        <option value="https://viu.tv/ch/96">Viu96台</option>
+        <option value="https://news.tvb.com/tc/live/83">TVB83台</option>
     `;
     liveChannelsDropdown.onchange = (e) => {
         if (e.target.value) {
