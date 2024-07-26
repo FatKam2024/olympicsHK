@@ -118,19 +118,13 @@ const createTables = (uniqueSports, uniqueDates, events) => {
 
 // Generate HTML for each table
 const generateTableHTML = (uniqueDates, events) => {
-    const today = new Date();
-    const todayStr = today.toLocaleDateString('en-GB', { day: 'numeric', month: '2-digit', year: 'numeric' });
-
     let tableHTML = '<thead><tr><th>Time</th>';
     uniqueDates.forEach(date => {
         const [day, month, year] = date.split('/');
         const dateObj = new Date(`${year}-${month}-${day}`);
         const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
-
-        const isToday = date === todayStr ? 'today' : '';
-
-        tableHTML += `<th class="date-header ${isToday}">${dayStr}<br>${weekday}</th>`;
+        tableHTML += `<th class="date-header">${dayStr}<br>${weekday}</th>`;
     });
     tableHTML += '</tr></thead><tbody>';
 
@@ -162,7 +156,6 @@ const generateTableHTML = (uniqueDates, events) => {
     tableHTML += '</tbody>';
     return tableHTML;
 };
-
 
 // Filter events by sport
 const filterSport = (sport) => {
@@ -317,19 +310,13 @@ document.head.insertAdjacentHTML('beforeend', `
         max-width: 80px;
     }
 
-    .date-header.today {
-        background-color: #ffeb3b;
-        color: #000;
-        font-weight: bold;
-    }
-
     @keyframes highlight {
         0% { background-color: #ffffff; }
         50% { background-color: #bbdefb; }
         100% { background-color: #ffffff; }
     }
 </style>
-
+`);
 
 // Wrap tables in a container for horizontal scrolling
 document.addEventListener('DOMContentLoaded', () => {
