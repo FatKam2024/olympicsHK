@@ -38,7 +38,7 @@ const createButtonAndDropdown = (uniqueSports) => {
     allSportsButton.innerText = 'All Sports';
     allSportsButton.onclick = () => {
         filterSport('All Sports');
-        document.querySelector('#buttons select').selectedIndex = 0;
+        document.querySelector('#buttons select').selectedIndex = 0;  // Reset to "Select a sport"
     };
     allSportsButton.classList.add('active');
     buttonsDiv.appendChild(allSportsButton);
@@ -78,6 +78,7 @@ const createButtonAndDropdown = (uniqueSports) => {
         }
     };
 };
+
 
 // Create tables for each sport
 const createTables = (uniqueSports, uniqueDates, events) => {
