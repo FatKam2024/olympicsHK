@@ -4,69 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hong Kong Team Matches - Paris Olympics</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-            width: 100px; /* Fixed column width */
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        button {
-            margin: 5px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        .active {
-            background-color: #4CAF50; /* Active button color */
-            color: white;
-        }
-        .hidden {
-            display: none;
-        }
-        .live-channels {
-            margin-top: 20px;
-        }
-        .live-channels a {
-            display: block;
-            margin: 5px 0;
-            font-size: 16px;
-            color: blue;
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-</head>
-<body>
-    <h1>Hong Kong Team Matches - Paris Olympics</h1>
-    <div id="buttons"></div>
-    <div id="tables"></div>
-
-    <div class="live-channels">
-        <h2>Live Channels</h2>
-        <a href="https://www.rthk.hk/timetable/tv31" target="_blank">香港電台31台直播連結</a>
-        <a href="https://app7.rthk.hk/special/sports32/index.php" target="_blank">香港電台32台直播連結</a>
-        <a href="https://hoy.tv/live?channel_no=77" target="_blank">HOY 77台直播連結</a>
-        <a href="https://hoy.tv/live?channel_no=76" target="_blank">HOY 76台直播連結</a>
-        <a href="https://viu.tv/ch/99" target="_blank">ViuTV99台直播連結</a>
-        <a href="https://viu.tv/ch/96" target="_blank">ViuTV96台直播連結</a>
-        <a href="https://news.tvb.com/tc/live/83" target="_blank">TVB新聞台83台直播連結</a>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hong Kong Team Matches - Paris Olympics</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <style>
         body {
@@ -93,13 +30,17 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
         }
         button:hover {
             background-color: #45a049;
         }
+        button:active {
+            transform: scale(0.95);
+        }
         button.active {
             background-color: #45a049;
+            box-shadow: 0 0 10px rgba(69, 160, 73, 0.5);
         }
         #tables {
             overflow-x: auto;
@@ -141,6 +82,18 @@
         }
         .live-channels a:hover {
             background-color: #2980b9;
+        }
+        .event {
+            margin-bottom: 10px;
+        }
+        .event-time {
+            font-weight: bold;
+        }
+        .event-name {
+            margin: 2px 0;
+        }
+        .event-player {
+            font-style: italic;
         }
         @media (max-width: 768px) {
             th, td {

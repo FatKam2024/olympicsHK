@@ -67,13 +67,14 @@ const createTables = (uniqueSports, uniqueDates, events) => {
 
 // Generate HTML for each table
 const generateTableHTML = (uniqueDates, events) => {
-    let tableHTML = '<thead><tr><th>Time</th>';
-    uniqueDates.forEach(date => {
-        const [day, month, year] = date.split('/');
-        const dateObj = new Date(`${year}-${month}-${day}`);
-        const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-        const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
-        tableHTML += `<th class="date-header">${dayStr}<br>${weekday}</th>`;
+    let tableHTML = '<thead><tr><th style="width: 80px;">Time</th>';
+    const hardcodedDates = [
+        '27 Jul (Sat)', '28 Jul (Sun)', '29 Jul (Mon)', '30 Jul (Tue)', '31 Jul (Wed)',
+        '1 Aug (Thu)', '2 Aug (Fri)', '3 Aug (Sat)', '4 Aug (Sun)', '5 Aug (Mon)',
+        '6 Aug (Tue)', '7 Aug (Wed)', '8 Aug (Thu)', '9 Aug (Fri)', '10 Aug (Sat)', '11 Aug (Sun)'
+    ];
+    hardcodedDates.forEach(date => {
+        tableHTML += `<th class="date-header" style="width: 250px;">${date}</th>`;
     });
     tableHTML += '</tr></thead><tbody>';
 
@@ -82,18 +83,19 @@ const generateTableHTML = (uniqueDates, events) => {
     timeSlots.forEach(slot => {
         let row = `<tr><td>${slot}</td>`;
         let rowHasEvent = false;
-        uniqueDates.forEach(date => {
+        hardcodedDates.forEach((date, index) => {
             const slotStartHour = parseInt(slot.split(':')[0]);
             const slotEvents = events.filter(event => {
+                const [eventDay, eventMonth] = event.date.split('/');
                 const [eventHour, eventMinute] = event.time.split(':').map(Number);
-                return event.date === date && eventHour === slotStartHour;
+                return `${eventDay} ${eventMonth.slice(0, 3)}` === date.slice(0, 6) && eventHour === slotStartHour;
             });
             if (slotEvents.length > 0) rowHasEvent = true;
             const eventsList = slotEvents.map(event => `
                 <div class="event">
-                    <strong>${event.time}</strong><br>
-                    ${event.event}<br>
-                    <em>${event.player}</em>
+                    <div class="event-time">${event.time}</div>
+                    <div class="event-name">${event.event}</div>
+                    <div class="event-player">${event.player}</div>
                 </div>
             `).join('');
             row += `<td>${eventsList}</td>`;
