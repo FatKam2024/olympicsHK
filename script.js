@@ -14,10 +14,11 @@ fetch('OlympicsHK.csv')
                     player: row['Player']
                 }));
                 const uniqueDates = [...new Set(events.map(e => e.date))];
-                const uniqueSports = ['All Sports', ...new Set(events.map(e => e.sport))];
+                const uniqueSports = [...new Set(events.map(e => e.sport))];
 
-                createButtons(uniqueSports);
-                createTables(uniqueSports, events);
+                createButtons(['All Sports', ...uniqueSports]);
+                createTables('All Sports', uniqueDates, events);
+                createTables(uniqueSports, uniqueDates, events);
 
                 // Show the first sport by default
                 if (uniqueSports.length > 0) {
@@ -28,7 +29,6 @@ fetch('OlympicsHK.csv')
     })
     .catch(error => {
         console.error('Error fetching CSV:', error);
-        document.getElementById('tables').innerHTML = '<p>Error loading data. Please try again later.</p>';
     });
 
 // Create buttons for sports
@@ -44,28 +44,36 @@ const createButtons = (uniqueSports) => {
 };
 
 // Create tables for each sport
-const createTables = (uniqueSports, events) => {
+const createTables = (uniqueSports, uniqueDates, events) => {
     const tablesDiv = document.getElementById('tables');
-    uniqueSports.forEach(sport => {
+    if (typeof uniqueSports === 'string') {
+        // For 'All Sports' table
         const table = document.createElement('table');
-        table.id = sport;
+        table.id = uniqueSports;
         table.classList.add('hidden');
-        table.innerHTML = generateTableHTML(events.filter(event => sport === 'All Sports' || event.sport === sport));
+        table.innerHTML = generateTableHTML(uniqueDates, events);
         tablesDiv.appendChild(table);
-    });
+    } else {
+        // For individual sport tables
+        uniqueSports.forEach(sport => {
+            const table = document.createElement('table');
+            table.id = sport;
+            table.classList.add('hidden');
+            table.innerHTML = generateTableHTML(uniqueDates, events.filter(event => event.sport === sport));
+            tablesDiv.appendChild(table);
+        });
+    }
 };
 
 // Generate HTML for each table
-const generateTableHTML = (events) => {
-    const hardcodedDates = [
-        '27 Jul (Sat)', '28 Jul (Sun)', '29 Jul (Mon)', '30 Jul (Tue)', '31 Jul (Wed)',
-        '1 Aug (Thu)', '2 Aug (Fri)', '3 Aug (Sat)', '4 Aug (Sun)', '5 Aug (Mon)',
-        '6 Aug (Tue)', '7 Aug (Wed)', '8 Aug (Thu)', '9 Aug (Fri)', '10 Aug (Sat)', '11 Aug (Sun)'
-    ];
-
-    let tableHTML = '<thead><tr><th style="width: 80px;">Time</th>';
-    hardcodedDates.forEach(date => {
-        tableHTML += `<th class="date-header" style="width: 250px;">${date}</th>`;
+const generateTableHTML = (uniqueDates, events) => {
+    let tableHTML = '<thead><tr><th>Time</th>';
+    uniqueDates.forEach(date => {
+        const [day, month, year] = date.split('/');
+        const dateObj = new Date(`${year}-${month}-${day}`);
+        const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
+        tableHTML += `<th class="date-header">${dayStr}<br>${weekday}</th>`;
     });
     tableHTML += '</tr></thead><tbody>';
 
@@ -74,19 +82,18 @@ const generateTableHTML = (events) => {
     timeSlots.forEach(slot => {
         let row = `<tr><td>${slot}</td>`;
         let rowHasEvent = false;
-        hardcodedDates.forEach(date => {
-            const slotStartHour = parseInt(slot);
+        uniqueDates.forEach(date => {
+            const slotStartHour = parseInt(slot.split(':')[0]);
             const slotEvents = events.filter(event => {
-                const [eventDay, eventMonth] = event.date.split('/');
-                const [eventHour] = event.time.split(':').map(Number);
-                return `${eventDay} ${eventMonth.slice(0, 3)}` === date.slice(0, 6) && eventHour === slotStartHour;
+                const [eventHour, eventMinute] = event.time.split(':').map(Number);
+                return event.date === date && eventHour === slotStartHour;
             });
             if (slotEvents.length > 0) rowHasEvent = true;
             const eventsList = slotEvents.map(event => `
                 <div class="event">
-                    <div class="event-time">${event.time}</div>
-                    <div class="event-name">${event.event}</div>
-                    <div class="event-player">${event.player}</div>
+                    <strong>${event.time}</strong><br>
+                    ${event.event}<br>
+                    <em>${event.player}</em>
                 </div>
             `).join('');
             row += `<td>${eventsList}</td>`;
