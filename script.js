@@ -153,6 +153,7 @@ document.head.insertAdjacentHTML('beforeend', `
     table {
         border-collapse: collapse;
         width: 100%;
+        font-size: 14px;
     }
 
     th, td {
@@ -191,6 +192,35 @@ document.head.insertAdjacentHTML('beforeend', `
         border: none;
         border-top: 1px solid #ddd;
         margin: 10px 0;
+    }
+
+    #buttons button {
+        margin: 5px;
+        padding: 10px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        background-color: #f8f8f8;
+        transition: all 0.3s ease;
+    }
+
+    #buttons button:hover {
+        background-color: #e8e8e8;
+    }
+
+    #buttons button.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    td {
+        min-width: 200px;
+        max-width: 250px;
+    }
+
+    td:first-child {
+        min-width: 80px;
+        max-width: 80px;
     }
 </style>
 `);
