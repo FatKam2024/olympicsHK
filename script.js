@@ -95,7 +95,7 @@ const generateTableHTML = (uniqueDates, events) => {
                     ${event.event}<br>
                     <em>${event.player}</em>
                 </div>
-            `).join('');
+            `).join('<hr>');
             row += `<td>${eventsList}</td>`;
         });
         row += '</tr>';
@@ -117,13 +117,89 @@ const filterSport = (sport) => {
         }
     });
 
-    // Update active button
+    // Update active button with highlight effect
     const buttons = document.querySelectorAll('#buttons button');
     buttons.forEach(button => {
         if (button.innerText === sport) {
             button.classList.add('active');
+            button.style.animation = 'highlight 0.5s ease';
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 500);
         } else {
             button.classList.remove('active');
         }
     });
 };
+
+// Add this to your existing CSS or create a new <style> tag in your HTML
+document.head.insertAdjacentHTML('beforeend', `
+<style>
+    @keyframes highlight {
+        0% { background-color: #ffffff; }
+        50% { background-color: #ffff00; }
+        100% { background-color: #ffffff; }
+    }
+
+    #tables {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    td:first-child {
+        position: sticky;
+        left: 0;
+        background-color: #f2f2f2;
+        z-index: 2;
+    }
+
+    th:first-child {
+        z-index: 3;
+    }
+
+    .event {
+        margin-bottom: 10px;
+    }
+
+    .event:last-child {
+        margin-bottom: 0;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 10px 0;
+    }
+</style>
+`);
+
+// Wrap tables in a container for horizontal scrolling
+document.addEventListener('DOMContentLoaded', () => {
+    const tablesDiv = document.getElementById('tables');
+    const tableContainer = document.createElement('div');
+    tableContainer.className = 'table-container';
+    tablesDiv.parentNode.insertBefore(tableContainer, tablesDiv);
+    tableContainer.appendChild(tablesDiv);
+});
