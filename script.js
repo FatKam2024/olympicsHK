@@ -21,12 +21,13 @@ fetch('OlympicsHK.csv')
                 console.log('Unique Dates:', uniqueDates); // Debugging line
                 console.log('Unique Sports:', uniqueSports); // Debugging line
 
-                createButtons(uniqueSports);
+                createButtons(['All Sports', ...uniqueSports]);
+                createTables('All Sports', uniqueDates, events);
                 createTables(uniqueSports, uniqueDates, events);
 
                 // Show the first sport by default
                 if (uniqueSports.length > 0) {
-                    filterSport(uniqueSports[0]);
+                    filterSport('All Sports');
                 }
             }
         });
@@ -51,13 +52,23 @@ const createButtons = (uniqueSports) => {
 // Create tables for each sport
 const createTables = (uniqueSports, uniqueDates, events) => {
     const tablesDiv = document.getElementById('tables');
-    uniqueSports.forEach(sport => {
+    if (typeof uniqueSports === 'string') {
+        // For 'All Sports' table
         const table = document.createElement('table');
-        table.id = sport;
+        table.id = uniqueSports;
         table.classList.add('hidden');
-        table.innerHTML = generateTableHTML(uniqueDates, events.filter(event => event.sport === sport));
+        table.innerHTML = generateTableHTML(uniqueDates, events);
         tablesDiv.appendChild(table);
-    });
+    } else {
+        // For individual sport tables
+        uniqueSports.forEach(sport => {
+            const table = document.createElement('table');
+            table.id = sport;
+            table.classList.add('hidden');
+            table.innerHTML = generateTableHTML(uniqueDates, events.filter(event => event.sport === sport));
+            tablesDiv.appendChild(table);
+        });
+    }
 };
 
 // Generate HTML for each table
@@ -67,8 +78,8 @@ const generateTableHTML = (uniqueDates, events) => {
     uniqueDates.forEach(date => {
         const [day, month, year] = date.split('/');
         const dateObj = new Date(`${year}-${month}-${day}`);
-        const dayStr = dateObj.toLocaleDateString('zh-HK', { month: 'numeric', day: 'numeric' });
-        const weekday = dateObj.toLocaleDateString('zh-HK', { weekday: 'short' });
+        const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
         headerRow += `<th>${dayStr} (${weekday})</th>`;
     });
     headerRow += '</tr>';
