@@ -16,14 +16,12 @@ fetch('OlympicsHK.csv')
                 const uniqueDates = [...new Set(events.map(e => e.date))];
                 const uniqueSports = [...new Set(events.map(e => e.sport))];
 
-                createButtons(['All Sports', ...uniqueSports]);
+                createButtonAndDropdown(['All Sports', ...uniqueSports]);
                 createTables('All Sports', uniqueDates, events);
                 createTables(uniqueSports, uniqueDates, events);
 
-                // Show the first sport by default
-                if (uniqueSports.length > 0) {
-                    filterSport('All Sports');
-                }
+                // Show All Sports by default
+                filterSport('All Sports');
             }
         });
     })
@@ -31,16 +29,36 @@ fetch('OlympicsHK.csv')
         console.error('Error fetching CSV:', error);
     });
 
-// Create buttons for sports
-const createButtons = (uniqueSports) => {
+// Create "All Sports" button and sports dropdown
+const createButtonAndDropdown = (uniqueSports) => {
     const buttonsDiv = document.getElementById('buttons');
-    uniqueSports.forEach((sport, index) => {
-        const button = document.createElement('button');
-        button.innerText = sport;
-        button.onclick = () => filterSport(sport);
-        if (index === 0) button.classList.add('active');
-        buttonsDiv.appendChild(button);
+    
+    // Create "All Sports" button
+    const allSportsButton = document.createElement('button');
+    allSportsButton.innerText = 'All Sports';
+    allSportsButton.onclick = () => filterSport('All Sports');
+    allSportsButton.classList.add('active');
+    buttonsDiv.appendChild(allSportsButton);
+
+    // Create dropdown for other sports
+    const dropdown = document.createElement('select');
+    dropdown.onchange = (e) => filterSport(e.target.value);
+    
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.text = 'Select a sport';
+    defaultOption.value = '';
+    dropdown.add(defaultOption);
+
+    // Add sport options
+    uniqueSports.slice(1).forEach(sport => {
+        const option = document.createElement('option');
+        option.text = sport;
+        option.value = sport;
+        dropdown.add(option);
     });
+
+    buttonsDiv.appendChild(dropdown);
 };
 
 // Create tables for each sport
@@ -133,6 +151,7 @@ const filterSport = (sport) => {
 };
 
 // Add this to your existing CSS or create a new <style> tag in your HTML
+// Update the CSS styles
 document.head.insertAdjacentHTML('beforeend', `
 <style>
     body {
@@ -151,7 +170,7 @@ document.head.insertAdjacentHTML('beforeend', `
         margin-bottom: 20px;
     }
 
-    #buttons button {
+    #buttons button, #buttons select {
         margin: 5px;
         padding: 12px 20px;
         font-size: 16px;
@@ -159,18 +178,28 @@ document.head.insertAdjacentHTML('beforeend', `
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        background-color: #4CAF50;
+        background-color: #1e88e5;
         color: white;
         transition: all 0.3s ease;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    #buttons button:hover {
-        background-color: #45a049;
+    #buttons button:hover, #buttons select:hover {
+        background-color: #1565c0;
     }
 
     #buttons button.active {
-        background-color: #357a38;
+        background-color: #0d47a1;
+    }
+
+    #buttons select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+        background-repeat: no-repeat;
+        background-position-x: 95%;
+        background-position-y: 50%;
     }
 
     #tables {
@@ -198,7 +227,7 @@ document.head.insertAdjacentHTML('beforeend', `
     }
 
     th {
-        background-color: #4CAF50;
+        background-color: #1e88e5;
         color: white;
         position: sticky;
         top: 0;
@@ -208,7 +237,7 @@ document.head.insertAdjacentHTML('beforeend', `
     td:first-child {
         position: sticky;
         left: 0;
-        background-color: #e8f5e9;
+        background-color: #e3f2fd;
         font-weight: bold;
         z-index: 2;
     }
@@ -219,17 +248,17 @@ document.head.insertAdjacentHTML('beforeend', `
 
     .event {
         margin-bottom: 10px;
-        background-color: #f1f8e9;
+        background-color: #e3f2fd;
         padding: 8px;
         border-radius: 5px;
     }
 
     .event strong {
-        color: #1b5e20;
+        color: #0d47a1;
     }
 
     .event em {
-        color: #33691e;
+        color: #1565c0;
     }
 
     hr {
@@ -250,11 +279,12 @@ document.head.insertAdjacentHTML('beforeend', `
 
     @keyframes highlight {
         0% { background-color: #ffffff; }
-        50% { background-color: #c8e6c9; }
+        50% { background-color: #bbdefb; }
         100% { background-color: #ffffff; }
     }
 </style>
 `);
+
 // Wrap tables in a container for horizontal scrolling
 document.addEventListener('DOMContentLoaded', () => {
     const tablesDiv = document.getElementById('tables');
