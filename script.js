@@ -87,11 +87,8 @@ const createTables = (uniqueSports, uniqueDates, events) => {
 const generateTableHTML = (uniqueDates, events) => {
     let tableHTML = '<thead><tr><th>Time</th>';
     uniqueDates.forEach(date => {
-        const [day, month, year] = date.split('/');
-        const dateObj = new Date(`${year}-${month}-${day}`);
-        const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-        const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
-        tableHTML += `<th class="date-header">${dayStr}<br>${weekday}</th>`;
+        const formattedDate = formatDate(date);
+        tableHTML += `<th class="date-header">${formattedDate}</th>`;
     });
     tableHTML += '</tr></thead><tbody>';
 
@@ -150,6 +147,13 @@ const filterSport = (sport) => {
     });
 };
 
+// Format date function
+const formatDate = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+    const date = new Date(year, month - 1, day);
+    return `${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}<br>${date.toLocaleDateString('en-GB', { weekday: 'short' })}`;
+};
+
 // Add this to your existing CSS or create a new <style> tag in your HTML
 // Update the CSS styles
 document.head.insertAdjacentHTML('beforeend', `
@@ -163,11 +167,17 @@ document.head.insertAdjacentHTML('beforeend', `
         text-align: center;
         color: #333;
         margin-bottom: 20px;
+        font-size: 24px;
     }
 
     #buttons {
         text-align: center;
         margin-bottom: 20px;
+        position: sticky;
+        top: 0;
+        background-color: #f0f0f0;
+        padding: 10px 0;
+        z-index: 1000;
     }
 
     #buttons button, #buttons select {
@@ -281,6 +291,31 @@ document.head.insertAdjacentHTML('beforeend', `
         0% { background-color: #ffffff; }
         50% { background-color: #bbdefb; }
         100% { background-color: #ffffff; }
+    }
+
+    .live-channels {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .live-channels h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .live-channels a {
+        display: inline-block;
+        margin: 5px;
+        padding: 10px 15px;
+        background-color: #1e88e5;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .live-channels a:hover {
+        background-color: #1565c0;
     }
 </style>
 `);
