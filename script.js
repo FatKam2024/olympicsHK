@@ -143,7 +143,7 @@ const generateTableHTML = (uniqueDates, events) => {
             const eventsList = slotEvents.map(event => `
                 <div class="event">
                     <strong>${event.time}</strong><br>
-                    ${event.event}<br>
+                    <span class="sport-type">${event.sport}:</span> ${event.event}<br>
                     <em>${event.player}</em>
                 </div>
             `).join('<hr>');
@@ -314,6 +314,32 @@ document.head.insertAdjacentHTML('beforeend', `
         0% { background-color: #ffffff; }
         50% { background-color: #bbdefb; }
         100% { background-color: #ffffff; }
+    }
+
+    .event {
+        margin-bottom: 10px;
+        background-color: #e3f2fd;
+        padding: 8px;
+        border-radius: 5px;
+    }
+
+    .event strong {
+        color: #0d47a1;
+        font-size: 1.2em;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .event .sport-type {
+        color: #1565c0;
+        font-weight: bold;
+    }
+
+    .event em {
+        color: #1565c0;
+        font-style: italic;
+        display: block;
+        margin-top: 5px;
     }
 </style>
 `);
