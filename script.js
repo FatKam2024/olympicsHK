@@ -93,7 +93,6 @@ const createButtonAndDropdown = (uniqueSports) => {
     buttonsDiv.appendChild(liveChannelsDropdown);
 };
 
-
 // Create tables for each sport
 const createTables = (uniqueSports, uniqueDates, events) => {
     const tablesDiv = document.getElementById('tables');
@@ -124,7 +123,8 @@ const generateTableHTML = (uniqueDates, events) => {
         const dateObj = new Date(`${year}-${month}-${day}`);
         const dayStr = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         const weekday = dateObj.toLocaleDateString('en-GB', { weekday: 'short' });
-        tableHTML += `<th class="date-header">${dayStr}<br>${weekday}</th>`;
+        const dateId = `date-${year}-${month}-${day}`; // Create a unique ID for each date
+        tableHTML += `<th class="date-header" id="${dateId}">${dayStr}<br>${weekday}</th>`;
     });
     tableHTML += '</tr></thead><tbody>';
 
@@ -142,8 +142,8 @@ const generateTableHTML = (uniqueDates, events) => {
             if (slotEvents.length > 0) rowHasEvent = true;
             const eventsList = slotEvents.map(event => `
                 <div class="event">
-                    <strong>${event.time}</strong> 
-                    <span class="sport-type">${event.sport}:</span> ${event.event} 
+                    <strong>${event.time}</strong>
+                    <span class="sport-type">${event.sport}:</span> ${event.event}
                     <em>${event.player}</em>
                 </div>
             `).join('<hr>');
@@ -156,7 +156,6 @@ const generateTableHTML = (uniqueDates, events) => {
     tableHTML += '</tbody>';
     return tableHTML;
 };
-
 
 // Filter events by sport
 const filterSport = (sport) => {
@@ -289,10 +288,21 @@ document.head.insertAdjacentHTML('beforeend', `
 
     .event strong {
         color: #0d47a1;
+        font-size: 1.2em;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .event .sport-type {
+        color: #1565c0;
+        font-weight: bold;
     }
 
     .event em {
         color: #1565c0;
+        font-style: italic;
+        display: block;
+        margin-top: 5px;
     }
 
     hr {
@@ -326,7 +336,7 @@ document.head.insertAdjacentHTML('beforeend', `
 
     .event strong {
         color: #0d47a1;
-        font-size: 1em;
+        font-size: 1.2em;
         display: block;
         margin-bottom: 5px;
     }
@@ -352,4 +362,12 @@ document.addEventListener('DOMContentLoaded', () => {
     tableContainer.className = 'table-container';
     tablesDiv.parentNode.insertBefore(tableContainer, tablesDiv);
     tableContainer.appendChild(tablesDiv);
+    
+    // Scroll to today's date
+    const today = new Date();
+    const todayId = `date-${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const todayElement = document.getElementById(todayId);
+    if (todayElement) {
+        todayElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
 });
