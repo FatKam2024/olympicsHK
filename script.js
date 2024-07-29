@@ -326,7 +326,7 @@ document.head.insertAdjacentHTML('beforeend', `
 
     .event strong {
         color: #0d47a1;
-        font-size: 1.2em;
+        font-size: 1em;
         display: block;
         margin-bottom: 5px;
     }
