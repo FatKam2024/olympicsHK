@@ -15,9 +15,8 @@ fetch('OlympicsHK.csv')
                 }));
                 const uniqueDates = [...new Set(events.map(e => e.date))];
                 const uniqueSports = [...new Set(events.map(e => e.sport))];
-                const uniquePlayers = [...new Set(events.map(e => e.player))];
 
-                createButtonAndDropdown(['All Sports', ...uniqueSports], uniquePlayers);
+                createButtonAndDropdown(['All Sports', ...uniqueSports]);
                 createTables('All Sports', uniqueDates, events);
                 createTables(uniqueSports, uniqueDates, events);
 
@@ -31,7 +30,7 @@ fetch('OlympicsHK.csv')
     });
 
 // Create "All Sports" button and sports dropdown
-const createButtonAndDropdown = (uniqueSports, uniquePlayers) => {
+const createButtonAndDropdown = (uniqueSports) => {
     const buttonsDiv = document.getElementById('buttons');
     
     // Create "All Sports" button
@@ -40,7 +39,6 @@ const createButtonAndDropdown = (uniqueSports, uniquePlayers) => {
     allSportsButton.onclick = () => {
         filterSport('All Sports');
         document.querySelector('#select-sport').selectedIndex = 0;
-        document.querySelector('#select-player').selectedIndex = 0;
     };
     allSportsButton.classList.add('active');
     buttonsDiv.appendChild(allSportsButton);
@@ -54,7 +52,6 @@ const createButtonAndDropdown = (uniqueSports, uniquePlayers) => {
         } else {
             filterSport(e.target.value);
         }
-        document.querySelector('#select-player').selectedIndex = 0;
     };
     
     // Add default option
@@ -72,33 +69,6 @@ const createButtonAndDropdown = (uniqueSports, uniquePlayers) => {
     });
 
     buttonsDiv.appendChild(sportDropdown);
-
-    // Create dropdown for players
-    const playerDropdown = document.createElement('select');
-    playerDropdown.id = 'select-player';
-    playerDropdown.onchange = (e) => {
-        if (e.target.value === '') {
-            filterSport('All Sports');
-        } else {
-            filterPlayer(e.target.value);
-        }
-    };
-    
-    // Add default option
-    const defaultPlayerOption = document.createElement('option');
-    defaultPlayerOption.text = 'Player';
-    defaultPlayerOption.value = '';
-    playerDropdown.add(defaultPlayerOption);
-
-    // Add player options
-    uniquePlayers.forEach(player => {
-        const option = document.createElement('option');
-        option.text = player;
-        option.value = player;
-        playerDropdown.add(option);
-    });
-
-    buttonsDiv.appendChild(playerDropdown);
 
     // Add dropdown for live channels
     const liveChannelsDropdown = document.createElement('select');
@@ -122,6 +92,7 @@ const createButtonAndDropdown = (uniqueSports, uniquePlayers) => {
 
     buttonsDiv.appendChild(liveChannelsDropdown);
 };
+
 
 // Create tables for each sport
 const createTables = (uniqueSports, uniqueDates, events) => {
@@ -172,7 +143,7 @@ const generateTableHTML = (uniqueDates, events) => {
             const eventsList = slotEvents.map(event => `
                 <div class="event">
                     <strong>${event.time}</strong><br>
-                    <span class="sport-type">${event.sport}:</span> ${event.event}<br>
+                    ${event.event}<br>
                     <em>${event.player}</em>
                 </div>
             `).join('<hr>');
@@ -210,36 +181,6 @@ const filterSport = (sport) => {
             button.classList.remove('active');
         }
     });
-
-    // Reset player dropdown
-    document.querySelector('#select-player').selectedIndex = 0;
-};
-
-// Filter events by player
-const filterPlayer = (player) => {
-    const tables = document.querySelectorAll('#tables table');
-    tables.forEach(table => {
-        const events = table.querySelectorAll('.event');
-        events.forEach(event => {
-            if (event.querySelector('em').textContent.includes(player)) {
-                event.style.display = 'block';
-                event.closest('tr').style.display = 'table-row';
-            } else {
-                event.style.display = 'none';
-                // Hide the entire row if all events are hidden
-                const visibleEvents = event.closest('td').querySelectorAll('.event[style="display: block;"]');
-                if (visibleEvents.length === 0) {
-                    event.closest('tr').style.display = 'none';
-                }
-            }
-        });
-        table.classList.remove('hidden');
-    });
-
-    // Update active button and dropdown
-    document.querySelectorAll('#buttons button').forEach(button => button.classList.remove('active'));
-    document.querySelector('#select-sport').selectedIndex = 0;
-    document.querySelector('#select-player').value = player;
 };
 
 // Add this to your existing CSS or create a new <style> tag in your HTML
@@ -347,21 +288,10 @@ document.head.insertAdjacentHTML('beforeend', `
 
     .event strong {
         color: #0d47a1;
-        font-size: 1.2em;
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .event .sport-type {
-        color: #1565c0;
-        font-weight: bold;
     }
 
     .event em {
         color: #1565c0;
-        font-style: italic;
-        display: block;
-        margin-top: 5px;
     }
 
     hr {
@@ -388,7 +318,7 @@ document.head.insertAdjacentHTML('beforeend', `
 </style>
 `);
 
-	// Wrap tables in a container for horizontal scrolling
+// Wrap tables in a container for horizontal scrolling
 document.addEventListener('DOMContentLoaded', () => {
     const tablesDiv = document.getElementById('tables');
     const tableContainer = document.createElement('div');
