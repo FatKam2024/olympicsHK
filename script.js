@@ -142,8 +142,8 @@ const generateTableHTML = (uniqueDates, events) => {
             if (slotEvents.length > 0) rowHasEvent = true;
             const eventsList = slotEvents.map(event => `
                 <div class="event">
-                    <strong>${event.time}</strong><br>
-                    <span class="sport-type">${event.sport}:</span> ${event.event}<br>
+                    <strong>${event.time}</strong> 
+                    <span class="sport-type">${event.sport}:</span> ${event.event} 
                     <em>${event.player}</em>
                 </div>
             `).join('<hr>');
@@ -156,6 +156,7 @@ const generateTableHTML = (uniqueDates, events) => {
     tableHTML += '</tbody>';
     return tableHTML;
 };
+
 
 // Filter events by sport
 const filterSport = (sport) => {
